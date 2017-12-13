@@ -4,6 +4,7 @@ const path = require('path');
 const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
+var fs = require('fs');
 
 // API file for interacting with MongoDB
 const api = require('./server/routes/api');
@@ -29,9 +30,17 @@ app.use('/webhooks/facebook', bot.middleware());
 
 // Setup listener for incoming messages 
 bot.on('message', function(userId, message){
-    // bot.sendTextMessage(userId, "Echo Message:" + message); 
-    
+    bot.sendTextMessage(userId, "Echo Message:" + message); 
+
+	fs.writeFile("/tmp/test", "Hey there!", function(err) {
+	    if(err) {
+	      //  return console.log(err);
+	    }
+
+	    //console.log("The file was saved!");
+	});     
     // Send quick replies 
+    /*
     var replies = [
         {
             "content_type": "text",
@@ -45,6 +54,7 @@ bot.on('message', function(userId, message){
         }
     ];
     bot.sendQuickReplies(userId, message, replies);
+    */
 });
  
 // Setup listener for quick reply messages 
