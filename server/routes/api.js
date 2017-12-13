@@ -25,7 +25,7 @@ router.get('/users', (req, res) => {
 });
 
 router.get('/webhooks/facebook', (req, res) => {
-    res.json(req.query);
+    res.json(req.query.hub.challenge);
 });
 
 router.post('/webhooks/facebook', (req, res) => {
