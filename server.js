@@ -31,14 +31,7 @@ app.use('/webhooks/facebook', bot.middleware());
 // Setup listener for incoming messages 
 bot.on('messages', function(userId, message){
     bot.sendTextMessage(userId, "Echo Message:" + message); 
-
-	fs.writeFile("/tmp/test", "Hey there!", function(err) {
-	    if(err) {
-	      //  return console.log(err);
-	    }
-
-	    //console.log("The file was saved!");
-	});     
+   
     // Send quick replies 
     /*
     var replies = [
