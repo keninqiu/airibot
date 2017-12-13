@@ -29,7 +29,7 @@ var bot = new FBBotFramework({
 app.use('/webhooks/facebook', bot.middleware());
 
 // Setup listener for incoming messages 
-bot.on('messages', function(userId, message){
+bot.on('message', function(userId, message){
     bot.sendTextMessage(userId, "Echo Message:" + message); 
    
     // Send quick replies 
