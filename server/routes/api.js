@@ -24,7 +24,7 @@ router.get('/users', (req, res) => {
     res.json(response);
 });
 
-router.post('/webhooks/facebook', (req, res) => {
+router.post('/facebook', (req, res) => {
     var users = [{id:1,name:'keningqiu'}];
     response.data = users;
     res.json(response);
