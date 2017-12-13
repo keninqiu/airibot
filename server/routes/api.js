@@ -25,7 +25,12 @@ router.get('/users', (req, res) => {
 });
 
 router.get('/webhooks/facebook', (req, res) => {
-    res.send(req.query['hub.challenge']);
+	if(req.query['hub.verify_token'] == '98523020') {
+		res.send(req.query['hub.challenge']);
+	}
+    else {
+    	res.send('');
+    }
 });
 
 router.post('/webhooks/facebook', (req, res) => {
