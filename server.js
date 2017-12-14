@@ -33,7 +33,7 @@ bot.on('message', function(userId, message){
     //bot.sendTextMessage(userId, "Echo Message:" + message); 
    
     // Send quick replies 
-    
+    var messageText = 'You say:' + message ;
     var replies = [
         {
             "content_type": "text",
@@ -46,7 +46,7 @@ bot.on('message', function(userId, message){
             "payload": "thumbs_down"
         }
     ];
-    bot.sendQuickReplies(userId, message, replies);
+    bot.sendQuickReplies(userId, messageText, replies);
     
 });
  
