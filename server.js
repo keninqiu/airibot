@@ -46,7 +46,7 @@ bot.on('message', function(userId, message){
             "payload": "thumbs_down"
         }
     ];
-    bot.sendQuickReplies(userId, 'my god', replies);
+    bot.sendQuickReplies(userId, message, replies);
     
 });
  
