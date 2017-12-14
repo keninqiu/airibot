@@ -37,12 +37,12 @@ bot.on('message', function(userId, message){
     var replies = [
         {
             "content_type": "text",
-            "title": "Good",
+            "title": "Good to go",
             "payload": "thumbs_up"
         },
         {
             "content_type": "text",
-            "title": "Bad",
+            "title": "Bad to delete",
             "payload": "thumbs_down"
         }
     ];
