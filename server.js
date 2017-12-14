@@ -30,10 +30,10 @@ app.use('/webhooks/facebook', bot.middleware());
 
 // Setup listener for incoming messages 
 bot.on('message', function(userId, message){
-    bot.sendTextMessage(userId, "Echo Message:" + message); 
+    //bot.sendTextMessage(userId, "Echo Message:" + message); 
    
     // Send quick replies 
-    /*
+    
     var replies = [
         {
             "content_type": "text",
@@ -47,7 +47,7 @@ bot.on('message', function(userId, message){
         }
     ];
     bot.sendQuickReplies(userId, message, replies);
-    */
+    
 });
  
 // Setup listener for quick reply messages 
