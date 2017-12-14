@@ -4,7 +4,12 @@ const path = require('path');
 const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
+var detect = require('./server/dialogflow/detect');
 
+const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
+const sessionId = 'quickstart-session-id';
+const query = 'hello';
+const languageCode = 'en-US';
 /*
 // API file for interacting with MongoDB
 const api = require('./server/routes/api');
@@ -20,6 +25,11 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api', api);
 */
 // Initialize 
+app.get('/test', function (req, res) {
+    var queries = ['hi'];
+  detectTextIntent(projectId,sessionId,queries, languageCode);
+  res.send('hello world');
+});
 var bot = new FBBotFramework({
     page_token: "EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD",
     verify_token: "98523020"
@@ -31,7 +41,8 @@ app.use('/webhooks/facebook', bot.middleware());
 // Setup listener for incoming messages 
 bot.on('message', function(userId, message){
     //bot.sendTextMessage(userId, "Echo Message:" + message); 
-   
+    var queries = [message];
+    detect.detectTextIntent(projectId,sessionId,queries, languageCode);
     // Send quick replies 
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var replies = [

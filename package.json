@@ -12,6 +12,9 @@
   },
   "private": true,
   "dependencies": {
+    "@google-cloud/common": "^0.13.3",
+    "pump": "^1.0.2",
+    "through2": "^2.0.3",    
     "@angular/animations": "^4.2.4",
     "@angular/common": "^4.2.4",
     "@angular/compiler": "^4.2.4",
