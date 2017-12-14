@@ -33,7 +33,7 @@ bot.on('message', function(userId, message){
     //bot.sendTextMessage(userId, "Echo Message:" + message); 
    
     // Send quick replies 
-    var messageText = 'You say:' + message ;
+    var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var replies = [
         {
             "content_type": "text",
