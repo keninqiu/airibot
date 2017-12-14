@@ -4,8 +4,8 @@ const path = require('path');
 const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
-var fs = require('fs');
 
+/*
 // API file for interacting with MongoDB
 const api = require('./server/routes/api');
 
@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // API location
 app.use('/api', api);
-
+*/
 // Initialize 
 var bot = new FBBotFramework({
     page_token: "EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD",
