@@ -13,27 +13,19 @@ const languageCode = 'en-US';
 
 /*
 // API file for interacting with MongoDB
-const api = require('./server/routes/api');
+
 
 // Parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 
-// Angular DIST output folder
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// API location
-app.use('/api', api);
-
-// Initialize 
-app.get('/test', function (req, res) {
-    var queries = ['hi'];
-  detect.detectTextIntent(projectId,sessionId,queries, languageCode);
-  res.send('hello world');
-});
 */
 
 app.use(express.static(path.join(__dirname, 'dist')));
+
+const api = require('./server/routes/api');
+app.use('/api', api);
+
 var bot = new FBBotFramework({
     page_token: "EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD",
     verify_token: "98523020"
