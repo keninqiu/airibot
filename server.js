@@ -10,7 +10,7 @@ const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
 const query = 'hello';
 const languageCode = 'en-US';
-/*
+
 // API file for interacting with MongoDB
 const api = require('./server/routes/api');
 
@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // API location
 app.use('/api', api);
-*/
+
 // Initialize 
 app.get('/test', function (req, res) {
     var queries = ['hi'];
