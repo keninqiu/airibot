@@ -11,6 +11,7 @@ const sessionId = 'quickstart-session-id';
 const query = 'hello';
 const languageCode = 'en-US';
 
+/*
 // API file for interacting with MongoDB
 const api = require('./server/routes/api');
 
@@ -30,6 +31,7 @@ app.get('/test', function (req, res) {
   detect.detectTextIntent(projectId,sessionId,queries, languageCode);
   res.send('hello world');
 });
+*/
 var bot = new FBBotFramework({
     page_token: "EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD",
     verify_token: "98523020"
@@ -42,7 +44,7 @@ app.use('/webhooks/facebook', bot.middleware());
 bot.on('message', function(userId, message){
     //bot.sendTextMessage(userId, "Echo Message:" + message); 
     var queries = [message];
-    detect.detectTextIntent(projectId,sessionId,queries, languageCode);
+    //detect.detectTextIntent(projectId,sessionId,queries, languageCode);
     // Send quick replies 
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var replies = [
