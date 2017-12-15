@@ -27,7 +27,7 @@ app.use('/api', api);
 // Initialize 
 app.get('/test', function (req, res) {
     var queries = ['hi'];
-  detectTextIntent(projectId,sessionId,queries, languageCode);
+  detect.detectTextIntent(projectId,sessionId,queries, languageCode);
   res.send('hello world');
 });
 var bot = new FBBotFramework({
