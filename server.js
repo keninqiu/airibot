@@ -32,6 +32,8 @@ app.get('/test', function (req, res) {
   res.send('hello world');
 });
 */
+
+app.use(express.static(path.join(__dirname, 'dist')));
 var bot = new FBBotFramework({
     page_token: "EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD",
     verify_token: "98523020"
