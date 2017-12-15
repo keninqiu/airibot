@@ -56,9 +56,9 @@ bot.on('message', function(userId, message){
     ];
     bot.sendQuickReplies(userId, messageText, replies);
 
-    sleep.sleep(1);
+    sleep.sleep(5);
     bot.sendQuickReplies(userId, messageText + ",repeat 1", replies);
-    sleep.sleep(1);
+    sleep.sleep(5);
     bot.sendQuickReplies(userId, messageText + ",repeat 2", replies);    
 });
  
