@@ -5,6 +5,7 @@ const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
 var detect = require('./server/dialogflow/detect');
+var sleep = require('sleep');
 
 const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
@@ -54,7 +55,11 @@ bot.on('message', function(userId, message){
         }
     ];
     bot.sendQuickReplies(userId, messageText, replies);
-    
+
+    sleep.sleep(1);
+    bot.sendQuickReplies(userId, messageText + ",repeat 1", replies);
+    sleep.sleep(1);
+    bot.sendQuickReplies(userId, messageText + ",repeat 2", replies);    
 });
  
 // Setup listener for quick reply messages 
