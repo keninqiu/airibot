@@ -12,9 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "@google-cloud/common": "^0.13.3",
-    "pump": "^1.0.2",
-    "through2": "^2.0.3",    
     "@angular/animations": "^4.2.4",
     "@angular/common": "^4.2.4",
     "@angular/compiler": "^4.2.4",
@@ -24,12 +21,16 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "@google-cloud/common": "^0.13.3",
     "body-parser": "^1.18.2",
     "core-js": "^2.4.1",
     "dialogflow": "^0.1.0",
     "express": "^4.16.2",
     "fb-bot-framework": "^0.3.0",
+    "fb-messenger": "^1.2.0",
+    "pump": "^1.0.2",
     "rxjs": "^5.4.2",
+    "through2": "^2.0.3",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
