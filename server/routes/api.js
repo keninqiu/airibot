@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+var intentCtrl = require('../controllers/intentCtrl.js');
+var bodyParser = require('body-parser');
 
+var jsonParser = bodyParser.json();
 
 // Error handling
 const sendError = (err, res) => {
@@ -28,4 +31,6 @@ router.get('/users', (req, res) => {
     res.json(response);
 });
 
+router.get('/intents',jsonParser, intentCtrl.lists);  
+router.post('/intent/create',jsonParser, intentCtrl.create);  
 module.exports = router;

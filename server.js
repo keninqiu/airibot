@@ -12,16 +12,6 @@ const sessionId = 'quickstart-session-id';
 const query = 'hello';
 const languageCode = 'en-US';
 
-/*
-// API file for interacting with MongoDB
-
-
-// Parsers
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
-
-*/
-
 app.use(express.static(path.join(__dirname, 'dist')));
 
 const api = require('./server/routes/api');

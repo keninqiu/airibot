@@ -1,1 +1,5 @@
 https://coursetro.com/posts/code/84/Setting-up-an-Angular-4-MEAN-Stack-(Tutorial)
+ng build --watch && PORT=3014 node server.js
+
+ng build --watch
+PORT=4208 nodemon ./server.js
