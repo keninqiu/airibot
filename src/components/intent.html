@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
 	<div class="row flex-xl-nowrap">
 		<div class="col-12 col-md-3 col-xl-2 bd-sidebar">
@@ -6,14 +7,79 @@
 		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createIntentModal">
 		  Create
 		</button>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteIntentModal">
+			Delete
+		</button>
 		</div>
 			<!-- As a link -->
-			<nav class="navbar navbar-light bg-light" *ngFor="let intent of intents">
-			  <a class="navbar-brand" href="#">{{intent.Name}}</a>
-			</nav>
+      
+		<div class="sidebar-nav">
+          <ul class="nav navbar-nav">
+            <li [ngClass]="{'active': selectedIntent == intent}" (click)="intentClick($event, intent)" *ngFor="let intent of intents"><a >{{intent.Name}}</a></li>
+          </ul>
+         </div>
 		</div>
+ 
 		<main class="col-12 col-md-9 col-xl-8 bd-content" role="main">
-			main
+      <div>User Says
+
+<div class="container" *ngIf="selectedIntent">
+  <div class="panel panel-default">
+    <table class="table table-hover">
+      <tbody>
+        <tr *ngFor="let message of selectedIntent.UserSays">
+          <td>
+            <span class="glyphicon glyphicon-file"></span>
+            {{message.text}}
+          </td>
+          <td class="text-right text-nowrap">
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.id)">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+        <div class="input-group">
+           <input type="text" class="form-control" [(ngModel)]="user_says" >    
+           <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" (click)="saveUserSays()">Save</button>
+           </span>
+        </div>
+      </div>
+      <div>Response Message
+<div class="container" *ngIf="selectedIntent">
+  <div class="panel panel-default">
+    <table class="table table-hover">
+      <tbody>
+        <tr *ngFor="let message of selectedIntent.Response">
+          <td>
+            <span class="glyphicon glyphicon-file"></span>
+            {{message.text}}
+          </td>
+          <td class="text-right text-nowrap">
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.id)">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>      
+        <div class="input-group">
+           <input type="text" class="form-control" [(ngModel)]="response_message">
+           <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" (click)="saveResponse()">Save</button>
+           </span>
+        </div>        
+      </div>
 		</main>
 	</div>
 </div>
@@ -31,9 +97,32 @@
       <div class="modal-body">
         <input type="text" class="form-control" [(ngModel)]="name" aria-label="Intent Name">
       </div>
+	<div class="alert alert-danger" role="alert" [hidden]="hideAlert">
+	  Duplicated Intent's Name.
+	</div>      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" #closeBtn (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="saveIntent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteIntentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Intent</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+      </div>    
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="saveIntent()" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" (click)="deleteIntent()" data-dismiss="modal">Delete</button>
       </div>
     </div>
   </div>

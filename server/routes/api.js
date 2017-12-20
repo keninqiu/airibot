@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 var intentCtrl = require('../controllers/intentCtrl.js');
+var intentMessageCtrl = require('../controllers/intentMessageCtrl.js');
 var bodyParser = require('body-parser');
 
 var jsonParser = bodyParser.json();
-
+var urlEncodedParser = bodyParser.urlencoded({ extended: false });
 // Error handling
 const sendError = (err, res) => {
     response.status = 501;
@@ -33,4 +34,8 @@ router.get('/users', (req, res) => {
 
 router.get('/intents',jsonParser, intentCtrl.lists);  
 router.post('/intent/create',jsonParser, intentCtrl.create);  
+router.post('/intent/delete',jsonParser, intentCtrl.delete); 
+router.get('/intentMessages',urlEncodedParser, intentMessageCtrl.lists);  
+router.post('/intentMessage/create',jsonParser, intentMessageCtrl.create);  
+router.post('/intentMessage/delete',jsonParser, intentMessageCtrl.delete); 
 module.exports = router;

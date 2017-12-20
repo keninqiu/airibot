@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AppIntent } from '../components/intent.component';
 import { RouterModule, Routes } from '@angular/router';
 import { IntentService } from '../services/intent.service';
+import { IntentMessageService } from '../services/intent-message.service';
 import { HttpModule } from '@angular/http';
 
 const appRoutes: Routes = [
@@ -21,7 +22,7 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [IntentService],
+  providers: [IntentService,IntentMessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

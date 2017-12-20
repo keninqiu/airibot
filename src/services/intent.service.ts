@@ -12,6 +12,11 @@ export class IntentService {
     {name:name})
       .map(res => res.json());
   }
+  delete(id: number) {
+    return this.http.post ('/api/intent/delete',
+    {id:id})
+      .map(res => res.json());
+  }
   list() {
     return this.http.get ('/api/intents')
       .map(res => res.json());    
