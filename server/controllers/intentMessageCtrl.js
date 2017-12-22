@@ -1,15 +1,10 @@
+var database = require('../common/database.js');
+var dialogflowManager = require('../common/dialogflowManager.js');
+
 module.exports = {
   lists : function(req, res) {
     var intent_id = req.body.intent_id;
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
+    var connection = database.getConn();
      
     connection.query('SELECT * from IntentMessage where IntentID=' + intent_id, function (error, results, fields) {
       if (error) throw error;
@@ -25,15 +20,7 @@ module.exports = {
   	intent_id = body.intent_id;
     type = body.type;
     text = body.text;
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
+    var connection = database.getConn();
      
     connection.query("insert into IntentMessage(IntentID,Type,Text) values(" + intent_id + "," + type + ",'" + text + "')", function (error, results, fields) {
       if (error)  {
@@ -50,7 +37,9 @@ module.exports = {
 	      	  };
 	          res.json(resJson);
 	          return;
-	      }      		
+	      }     
+
+          dialogflowManager.updateIntent('testagain',[text]);         		
       	  var resJson = {
       	  	code:200,
       	  	intentMessages:results
@@ -67,16 +56,7 @@ module.exports = {
   delete: function(req, res) {
     body = req.body;  
     id = body.id;    
-    console.log('id='+id);
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
+    var connection = database.getConn();
      
     connection.query('DELETE from IntentMessage where id=' + id, function (error, results, fields) {
       if (error) throw error;

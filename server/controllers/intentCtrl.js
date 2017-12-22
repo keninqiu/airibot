@@ -1,16 +1,11 @@
+var database = require('../common/database.js');
+var dialogflowManager = require('../common/dialogflowManager.js');
+
 module.exports = {
   lists : function(req, res) {
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
-     
-    connection.query('SELECT Intent.*,IntentMessage.ID as IntentMessageID,IntentMessage.Type,IntentMessage.Text from Intent left join IntentMessage on IntentMessage.IntentID=Intent.ID', function (error, results, fields) {
+    var connection = database.getConn(); 
+    var sql = 'SELECT Intent.*,IntentMessage.ID as IntentMessageID,IntentMessage.Type,IntentMessage.Text from Intent left join IntentMessage on IntentMessage.IntentID=Intent.ID';
+    connection.query(sql, function (error, results, fields) {
       if (error) throw error;
       var intents = [];
       for (i = 0; i < results.length; i++) { 
@@ -49,15 +44,7 @@ module.exports = {
 
   	body = req.body;	
   	name = body.name;
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
+    var connection = database.getConn(); 
      
     connection.query("insert into Intent(Name) values('" + name + "')", function (error, results, fields) {
       if (error)  {
@@ -74,7 +61,33 @@ module.exports = {
 	      	  };
 	          res.json(resJson);
 	          return;
-	      }      		
+	      }  
+
+        dialogflowManager.createIntent(name);
+        /*
+        var sessionClientRequestBundle = dialogflowManager.getSessionClientRequest('Hi');
+        var sessionClient = sessionClientRequestBundle.sessionClient;
+        var request = sessionClientRequestBundle.request;
+        // Send request and log result
+        sessionClient
+          .detectIntent(request)
+          .then(responses => {
+            console.log('Detected intent');
+            const result = responses[0].queryResult;
+            console.log(`  Query: ${result.queryText}`);
+            console.log(`  Response: ${result.fulfillmentText}`);
+            if (result.intent) {
+              console.log(`  Intent: ${result.intent.displayName}`);
+            } else {
+              console.log(`  No intent matched.`);
+            }
+          })
+          .catch(err => {
+            console.error('ERROR:', err);
+          });   
+          */
+
+
       	  var resJson = {
       	  	code:200,
       	  	intents:results
@@ -92,15 +105,7 @@ module.exports = {
     body = req.body;  
     id = body.id;    
     console.log('id='+id);
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
-    });
-     
-    connection.connect();
+    var connection = database.getConn(); 
      
     connection.query('DELETE from Intent where ID=' + id, function (error, results, fields) {
       if (error) throw error;

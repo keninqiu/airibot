@@ -7,3 +7,7 @@ https://chatbot.airi.io/webhooks/facebook?hub.mode=subscribe&hub.challenge=445fe
 https://www.facebook.com/messages/t/airitest
 
 weired: Airi Integrations Facebook Messenger must start
+
+
+
+https://github.com/dialogflow/dialogflow-nodejs-client-v2/blob/master/samples/resource.js
