@@ -75,13 +75,8 @@ export class AppIntent  implements OnInit{
           suc => {
             console.log(suc);
             if(suc.code == 200) {
-              var newIntentMessages = suc.intentMessages;
-              var newIntentMessage = newIntentMessages[0];
-              var message = {id:newIntentMessage.ID,text:newIntentMessage.Text};
-              if(!this.selectedIntent.UserSays) {
-                this.selectedIntent.UserSays = [];
-              }
-              this.selectedIntent.UserSays.push(message);
+              var intentMessages = suc.intentMessages;
+              this.selectedIntent.UserSays = intentMessages;
               this.user_says = '';  
             }
             else {
@@ -93,20 +88,21 @@ export class AppIntent  implements OnInit{
           }
         );    
   }
-  deleteIntentMessage(id:number) {
+  deleteIntentMessage(id:number,intent_id:number,type:number) {
     console.log('id in begin=' + id);
-        this.intentMessageService.delete(id).subscribe(    
+    console.log('type = ' + type);
+        this.intentMessageService.delete(id,intent_id,type).subscribe(    
           suc => {
             console.log('id=' + id);
             if(suc.code == 200) {   
               for(var i = this.selectedIntent.UserSays.length - 1; i >= 0; i--) {
-                console.log('the id=' + this.selectedIntent.UserSays[i].id);
-                if(this.selectedIntent.UserSays[i].id == id) {
+                console.log('the id=' + this.selectedIntent.UserSays[i].ID);
+                if(this.selectedIntent.UserSays[i].ID == id) {
                    this.selectedIntent.UserSays.splice(i, 1);
                 }
               }     
               for(var i = this.selectedIntent.Response.length - 1; i >= 0; i--) {
-                if(this.selectedIntent.Response[i].id == id) {
+                if(this.selectedIntent.Response[i].ID == id) {
                    this.selectedIntent.Response.splice(i, 1);
                 }
               }                        
@@ -124,13 +120,8 @@ export class AppIntent  implements OnInit{
           suc => {
             console.log(suc);
             if(suc.code == 200) {
-              var newIntentMessages = suc.intentMessages; 
-              var newIntentMessage = newIntentMessages[0];
-              var message = {id:newIntentMessage.ID,text:newIntentMessage.Text};
-              if(!this.selectedIntent.Response) {
-                this.selectedIntent.Response = [];
-              }              
-              this.selectedIntent.Response.push(message);              
+              var intentMessages = suc.intentMessages;
+              this.selectedIntent.Response = intentMessages;             
               this.response_message = '';
             }
             else {

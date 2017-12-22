@@ -12,9 +12,10 @@ export class IntentMessageService {
     {intent_id:intent_id,type:type,text:text})
       .map(res => res.json());
   }
-  delete(id: number) {
+  delete(id: number,intent_id:number,type:number) {
+    console.log('type in service.ts=' + type);
     return this.http.post ('/api/intentMessage/delete',
-    {id:id})
+    {id:id,intent_id:intent_id,type:type})
       .map(res => res.json());
   }
   list(intent_id: number) {

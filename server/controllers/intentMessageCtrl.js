@@ -30,7 +30,7 @@ module.exports = {
           res.json(resJson);
           return;
       }
-      connection.query("SELECT * from IntentMessage where IntentID=" + intent_id + " and Type=" + type + " and Text='" + text + "'", function (error, results, fields) {
+      connection.query("SELECT Intent.NameInDialogFlow,IntentMessage.* from IntentMessage,Intent where Intent.ID=IntentMessage.IntentID and Intent.ID=" + intent_id + " and IntentMessage.Type=" + type, function (error, results, fields) {
 	      if (error)  {
 	      	  var resJson = {
 	      	  	code:401
@@ -39,7 +39,20 @@ module.exports = {
 	          return;
 	      }     
 
-          dialogflowManager.updateIntent('testagain',[text]);         		
+        if(type == 1) {
+          var intentName = '';
+          var textArray = [];
+          for(var i=0;i<results.length;i++) {
+            var item = results[i];
+            intentName = item.NameInDialogFlow;
+            textArray.push(item.Text);
+          }
+          console.log('before update Intent');
+          console.log('intentName='+intentName);
+          console.log(textArray);
+          dialogflowManager.updateIntent(intentName,textArray);  
+        }
+
       	  var resJson = {
       	  	code:200,
       	  	intentMessages:results
@@ -54,16 +67,42 @@ module.exports = {
   update: function(req, res) {
   },
   delete: function(req, res) {
-    body = req.body;  
-    id = body.id;    
+    intent = req.body;  
+    id = intent.id;    
+    intent_id = intent.intent_id;
+    type = intent.type;
     var connection = database.getConn();
-     
-    connection.query('DELETE from IntentMessage where id=' + id, function (error, results, fields) {
-      if (error) throw error;
-      var resJson = {code:200,intentMessages:results};
-      res.json(resJson);
+    
+    connection.query('DELETE from IntentMessage where ID=' + id, function (error, results, fields) {
+        if (error) throw error;
+        console.log('type='+type); 
+        if(type == 1) {
+          console.log('1');
+          connection.query("SELECT Intent.NameInDialogFlow,IntentMessage.* from IntentMessage,Intent where Intent.ID=IntentMessage.IntentID and Intent.ID=" + intent_id + " and IntentMessage.Type=" + type, function (error, results, fields) {
+              if (error) throw error;
+              var intentName = '';
+              var textArray = [];
+              for(var i=0;i<results.length;i++) {
+                var item = results[i];
+                intentName = item.NameInDialogFlow;
+                textArray.push(item.Text);
+              }
+              console.log('updating me');
+              dialogflowManager.updateIntent(intentName,textArray);  
+          });
+        } 
+
+        var resJson = {code:200,intentMessages:results};
+        res.json(resJson);
+        if(type == 1) {
+          connection.end();
+        }
     });
-     
-    connection.end();       
+    
+
+    if(type != 1) {
+      connection.end(); 
+    }
+       
   }
 }

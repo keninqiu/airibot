@@ -16,20 +16,20 @@ module.exports = {
           if(intent.ID == item.ID) {
             existedInArray = true;
             if(item.Type == 1) {
-              intent.UserSays.push({id:item.IntentMessageID,text:item.Text});
+              intent.UserSays.push({ID:item.IntentMessageID,IntentID:item.IntentID,Type:item.Type,Text:item.Text});
             }
             else if(item.Type == 2){
-              intent.Response.push({id:item.IntentMessageID,text:item.Text});
+              intent.Response.push({ID:item.IntentMessageID,IntentID:item.IntentID,Type:item.Type,Text:item.Text});
             }
           }
         }
         if(!existedInArray) {
           intent = {ID:item.ID,Name:item.Name,UserSays:[],Response:[]};
           if(item.Type == 1) {
-            intent.UserSays.push({id:item.IntentMessageID,text:item.Text});
+            intent.UserSays.push({ID:item.IntentMessageID,IntentID:item.IntentID,Type:item.Type,Text:item.Text});
           }
           else if(item.Type == 2){
-            intent.Response.push({id:item.IntentMessageID,text:item.Text});
+            intent.Response.push({ID:item.IntentMessageID,IntentID:item.IntentID,Type:item.Type,Text:item.Text});
           }  
           intents.push(intent);        
         }
@@ -45,58 +45,48 @@ module.exports = {
   	body = req.body;	
   	name = body.name;
     var connection = database.getConn(); 
-     
-    connection.query("insert into Intent(Name) values('" + name + "')", function (error, results, fields) {
-      if (error)  {
-      	  var resJson = {
-      	  	code:400
-      	  };
-          res.json(resJson);
-          return;
-      }
-      connection.query("SELECT * from Intent where Name='" + name + "'", function (error, results, fields) {
-	      if (error)  {
-	      	  var resJson = {
-	      	  	code:401
-	      	  };
-	          res.json(resJson);
-	          return;
-	      }  
 
-        dialogflowManager.createIntent(name);
-        /*
-        var sessionClientRequestBundle = dialogflowManager.getSessionClientRequest('Hi');
-        var sessionClient = sessionClientRequestBundle.sessionClient;
-        var request = sessionClientRequestBundle.request;
-        // Send request and log result
-        sessionClient
-          .detectIntent(request)
-          .then(responses => {
-            console.log('Detected intent');
-            const result = responses[0].queryResult;
-            console.log(`  Query: ${result.queryText}`);
-            console.log(`  Response: ${result.fulfillmentText}`);
-            if (result.intent) {
-              console.log(`  Intent: ${result.intent.displayName}`);
-            } else {
-              console.log(`  No intent matched.`);
-            }
-          })
-          .catch(err => {
-            console.error('ERROR:', err);
-          });   
-          */
+    dialogflowManager.createIntent(name).then(responses => {
+        console.log('responsehaha from createIntent');
+        console.log(responses);
+        var intent = responses[0];
+        var NameInDialogFlow = intent.name;
+        console.log(NameInDialogFlow);
+        console.log('end');
+        connection.query("insert into Intent(Name,NameInDialogFlow) values('" + name + "','" + NameInDialogFlow + "')", function (error, results, fields) {
+          if (error)  {
+              var resJson = {
+                code:400
+              };
+              res.json(resJson);
+              return;
+          }
+          connection.query("SELECT * from Intent where Name='" + name + "'", function (error, results, fields) {
+            if (error)  {
+                var resJson = {
+                  code:401
+                };
+                res.json(resJson);
+                return;
+            }  
+
+              var resJson = {
+                code:200,
+                intents:results
+              };
+              res.json(resJson);
+              return;
+          });
+          connection.end();
+        });    
+        
+
+    })
+    .catch(err => {
+        console.error('ERROR:', err);
+    }); 
 
 
-      	  var resJson = {
-      	  	code:200,
-      	  	intents:results
-      	  };
-          res.json(resJson);
-          return;
-      });
-      connection.end();
-    });
         	
   },
   update: function(req, res) {
@@ -106,10 +96,15 @@ module.exports = {
     id = body.id;    
     console.log('id='+id);
     var connection = database.getConn(); 
-     
+    
+    connection.query('select * from Intent where ID=' + id, function (error, results, fields) {
+      var intent = results[0];
+      dialogflowManager.deleteIntent(intent.NameInDialogFlow);
+    }); 
     connection.query('DELETE from Intent where ID=' + id, function (error, results, fields) {
       if (error) throw error;
       connection.query('DELETE from IntentMessage where IntentID=' + id, function (error, results, fields) {
+        
         var resJson = {code:200,intents:results};
         res.json(resJson);
       });

@@ -30,10 +30,10 @@
         <tr *ngFor="let message of selectedIntent.UserSays">
           <td>
             <span class="glyphicon glyphicon-file"></span>
-            {{message.text}}
+            {{message.Text}}
           </td>
           <td class="text-right text-nowrap">
-            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.id)">
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,message.IntentID,message.Type)">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </button>
           </td>
@@ -61,10 +61,10 @@
         <tr *ngFor="let message of selectedIntent.Response">
           <td>
             <span class="glyphicon glyphicon-file"></span>
-            {{message.text}}
+            {{message.Text}}
           </td>
           <td class="text-right text-nowrap">
-            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.id)">
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,message.IntentID,message.Type)">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
             </button>
           </td>
