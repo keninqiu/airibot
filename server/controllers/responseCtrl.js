@@ -1,14 +1,58 @@
 var detect = require('../dialogflow/detect');
-var database = require('../common/database.js');
-
+//var database = require('../common/database.js');
+var Client = require("mysql-pro");
 
 module.exports = {
-  reply : function(userId, message) {
-  	detect.detectTextIntent(message).then(responses => {   
+  reply : async function(userId, message) {
+  	responses = await	detect.detectTextIntent(message);
+    const response = responses[0];
+    var intentName = response.queryResult.intent.displayName;
+  	console.log(intentName);
+
+  	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
+	var client = new Client({
+	    mysql: {
+	        host: "127.0.0.1",
+	        port: 3306,
+	        database: "airi_dev",
+	        user: "root",
+	        password: "mysql"
+	    }
+	});
+
+	await client.startTransaction();
+	var result = await client.executeTransaction(sql, []);
+	await client.stopTransaction();
+
+	//console.log('result=');
+	//console.log(result);
+	var text = 'unknown';
+	if (result.length > 0) {
+		text = result[0].Text;
+	}
+
+	var quickReplies = [
+	{
+		            "content_type": "text",
+		            "title": "Good",
+		            "payload": "thumbs_up"
+		        },
+		        {
+		            "content_type": "text",
+		            "title": "Bad",
+		            "payload": "thumbs_down"
+		        }
+	];	
+	var ret =  {messageText:text,quickReplies:quickReplies};
+	console.log('ret3=');
+	console.log(ret);    	
+	return ret;
+  	/*
+  await	detect.detectTextIntent(message).then(responses => {   
         const response = responses[0];
         var intentName = response.queryResult.intent.displayName;
         console.log('intentName=');
-        console.log(intentName);
+        console.log(intentName);  
 
 	    var connection = database.getConn();
 	     
@@ -38,6 +82,7 @@ module.exports = {
 	    connection.end();  
 
     });
+    */
   	/*
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var quickReplies = [

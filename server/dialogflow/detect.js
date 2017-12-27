@@ -26,7 +26,7 @@ const languageCode = 'en-US';
 
 module.exports = {
 
-detectTextIntent: function(query) {
+detectTextIntent: async function(query) {
   const dialogflow = require('dialogflow');
   const sessionClient = new dialogflow.SessionsClient();
   const sessionPath = sessionClient.sessionPath(projectId, sessionId);
@@ -40,7 +40,7 @@ detectTextIntent: function(query) {
         },
       },
   };  
-  promise = sessionClient.detectIntent(request);
+  promise = await sessionClient.detectIntent(request);
   return promise;
 },
 /*
