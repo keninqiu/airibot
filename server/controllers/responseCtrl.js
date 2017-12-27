@@ -14,7 +14,7 @@ module.exports = {
     var quickReplies = [
         {
             "content_type": "text",
-            "title": "Good",
+            "title": "Goodd",
             "payload": "thumbs_up"
         },
         {
