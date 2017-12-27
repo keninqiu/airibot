@@ -3,6 +3,7 @@ const router = express.Router();
 var intentCtrl = require('../controllers/intentCtrl.js');
 var intentMessageCtrl = require('../controllers/intentMessageCtrl.js');
 var bodyParser = require('body-parser');
+var detect = require('../dialogflow/detect');
 
 var jsonParser = bodyParser.json();
 var urlEncodedParser = bodyParser.urlencoded({ extended: false });
@@ -22,14 +23,17 @@ let response = {
 
 // Get users
 router.get('/users', (req, res) => {
+
+    detect.detectTextIntent(message);
     var FBMessenger = require('fb-messenger');
     var messenger = new FBMessenger('EAAOEyBY1Y04BALhBM3RIPlYdDB5tgyFHCHPPpAnswXSrOZBGF45BecWW0RtNA4oChZCWLV82nrJ8Hg3NaZAF16DB6UyQZAifMTGZBZCFj9kzm9RhXMSZC4KxXh1DyiAjqPp6b6NZC0FfYrDbsGvfPrZBIZAlgcGp5X4vBdGgo4pw2ZAMgZDZD');
      
-    messenger.sendTextMessage('1103988123037720', 'Hello World');
+    messenger.sendTextMessage('1103988123037720', 'Hellovsfas World');
 
     var users = [{id:1,name:'keningqiu'}];
     response.data = users;
     res.json(response);
+    
 });
 
 router.get('/intents',jsonParser, intentCtrl.lists);  
