@@ -31,7 +31,7 @@ bot.on('message', function(userId, message){
     //var queries = [message];
     //detect.detectTextIntent(projectId,sessionId,queries, languageCode);
     // Send quick replies 
-    var reply = responseCtrl.reply;
+    var reply = responseCtrl.reply(userId, message);
     bot.sendQuickReplies(userId, reply.messageText, reply.quickReplies);   
 });
  
