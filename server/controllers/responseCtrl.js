@@ -1,4 +1,4 @@
-//var detect = require('../dialogflow/detect');
+var detect = require('../dialogflow/detect');
 
 const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
