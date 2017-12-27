@@ -4,7 +4,11 @@ var detect = require('../dialogflow/detect');
 
 module.exports = {
   reply : function(userId, message) {
-  	detect.detectTextIntent(message);
+  	detect.detectTextIntent(message).then(responses => {   
+        const response = responses[0];
+        console.log('response=');
+        console.log(response);
+    });
 
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var quickReplies = [
