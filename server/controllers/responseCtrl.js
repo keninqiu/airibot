@@ -4,11 +4,7 @@ var detect = require('../dialogflow/detect');
 
 module.exports = {
   reply : function(userId, message) {
-  	var queries = [message];
-	const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
-	const sessionId = 'quickstart-session-id';
-	const languageCode = 'en-US';
-  	detect.detectTextIntent(projectId,sessionId,queries, languageCode)；
+  	detect.detectTextIntent(message)；
 
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var quickReplies = [

@@ -20,9 +20,30 @@ const structjson = require('./structjson.js');
 const pump = require('pump');
 const through2 = require('through2');
 
+const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
+const sessionId = 'quickstart-session-id';
+const languageCode = 'en-US';
+
 module.exports = {
 
-
+detectTextIntent: function(query) {
+  const dialogflow = require('dialogflow');
+  const sessionClient = new dialogflow.SessionsClient();
+  const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+  let promise;
+  const request = {
+      session: sessionPath,
+      queryInput: {
+        text: {
+          text: query,
+          languageCode: languageCode,
+        },
+      },
+  };  
+  promise = sessionClient.detectIntent(request);
+  return promise;
+},
+/*
 detectTextIntent: function(projectId, sessionId, queries, languageCode) {
   // [START dialogflow_detect_intent_text]
   // Imports the Dialogflow library
@@ -98,7 +119,7 @@ detectTextIntent: function(projectId, sessionId, queries, languageCode) {
 
   // [END dialogflow_detect_intent_text]
 },
-
+*/
 detectEventIntent:function(projectId, sessionId, eventName, languageCode) {
   // Imports the Dialogflow library
   const dialogflow = require('dialogflow');
