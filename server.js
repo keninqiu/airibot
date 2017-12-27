@@ -4,8 +4,8 @@ const path = require('path');
 const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
-var detect = require('./server/dialogflow/detect');
-var responseCtrl = require('../controllers/responseCtrl.js');
+//var detect = require('./server/dialogflow/detect');
+var responseCtrl = require('./server/controllers/responseCtrl.js');
 
 const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
