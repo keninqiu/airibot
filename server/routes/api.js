@@ -28,8 +28,9 @@ router.get('/users', (req, res) => {
     var message = 'hi';
     detect.detectTextIntent(message).then(responses => {   
         const response = responses[0];
-        console.log('response=');
-        console.log(response);
+        var intentName = response.queryResult.intent.displayName;
+        console.log('intentName=');
+        console.log(intentName);
     });
 
     var FBMessenger = require('fb-messenger');

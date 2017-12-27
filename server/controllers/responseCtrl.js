@@ -1,15 +1,32 @@
 var detect = require('../dialogflow/detect');
-
+var database = require('../common/database.js');
 
 
 module.exports = {
   reply : function(userId, message) {
   	detect.detectTextIntent(message).then(responses => {   
         const response = responses[0];
-        console.log('response=');
-        console.log(response);
-    });
+        var intentName = response.queryResult.intent.displayName;
+        console.log('intentName=');
+        console.log(intentName);
 
+	    var connection = database.getConn();
+	     
+	    connection.query("SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'", function (error, results, fields) {
+	      if (error) throw error;
+	      var length = results.length;
+	      if(length > 0) {
+	      	var randomIndex = Math.floor((Math.random() * 10));
+	      	var text = results[randomIndex].Text;
+	      	return {messageText:text,quickReplies:[]};  
+	      }
+
+	    });
+	     
+	    connection.end();  
+
+    });
+  	/*
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var quickReplies = [
         {
@@ -23,6 +40,7 @@ module.exports = {
             "payload": "thumbs_down"
         }
     ];
-    return {messageText:messageText,quickReplies:quickReplies};  	
+    
+    */	
   }
 }
