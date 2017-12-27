@@ -1,4 +1,4 @@
-var detect = require('../dialogflow/detect');
+//var detect = require('../dialogflow/detect');
 
 const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
@@ -8,7 +8,7 @@ module.exports = {
   reply : function(userId, message) {
   	var queries = [message];
 
-  	detect.detectTextIntent(projectId,sessionId,queries, languageCode)；
+  	//detect.detectTextIntent(projectId,sessionId,queries, languageCode)；
 
     var messageText = 'Your userId is ' + userId + ',You say:' + message ;
     var quickReplies = [
