@@ -33,8 +33,8 @@
             {{message.Text}}
           </td>
           <td class="text-right text-nowrap">
-            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,message.IntentID,message.Type)">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,selectedIntent.ID,message.Type)">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </button>
           </td>
         </tr>
@@ -64,8 +64,8 @@
             {{message.Text}}
           </td>
           <td class="text-right text-nowrap">
-            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,message.IntentID,message.Type)">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentMessage(message.ID,selectedIntent.ID,message.Type)">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
             </button>
           </td>
         </tr>

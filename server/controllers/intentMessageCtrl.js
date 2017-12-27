@@ -21,8 +21,11 @@ module.exports = {
     type = body.type;
     text = body.text;
     var connection = database.getConn();
-     
-    connection.query("insert into IntentMessage(IntentID,Type,Text) values(" + intent_id + "," + type + ",'" + text + "')", function (error, results, fields) {
+    
+    text = text.replace('\'', '\\\'');
+    sql = "insert into IntentMessage(IntentID,Type,Text) values(" + intent_id + "," + type + ",'" + text + "')";
+    console.log('sql=' + sql);
+    connection.query(sql, function (error, results, fields) {
       if (error)  {
       	  var resJson = {
       	  	code:400
@@ -68,6 +71,8 @@ module.exports = {
   },
   delete: function(req, res) {
     intent = req.body;  
+    console.log('intent=');
+    console.log(intent);
     id = intent.id;    
     intent_id = intent.intent_id;
     type = intent.type;
@@ -78,7 +83,9 @@ module.exports = {
         console.log('type='+type); 
         if(type == 1) {
           console.log('1');
-          connection.query("SELECT Intent.NameInDialogFlow,IntentMessage.* from IntentMessage,Intent where Intent.ID=IntentMessage.IntentID and Intent.ID=" + intent_id + " and IntentMessage.Type=" + type, function (error, results, fields) {
+          var sql = 'SELECT Intent.NameInDialogFlow,IntentMessage.* from Intent left join IntentMessage on Intent.ID=IntentMessage.IntentID and IntentMessage.Type=' + type + ' where Intent.ID=' + intent_id;
+          console.log('sql=' + sql);
+          connection.query(sql, function (error, results, fields) {
               if (error) throw error;
               var intentName = '';
               var textArray = [];
@@ -87,8 +94,11 @@ module.exports = {
                 intentName = item.NameInDialogFlow;
                 textArray.push(item.Text);
               }
-              console.log('updating me');
-              dialogflowManager.updateIntent(intentName,textArray);  
+              if(intentName != '') {
+                console.log('updating me');
+                dialogflowManager.updateIntent(intentName,textArray);                  
+              }
+
           });
         } 
 

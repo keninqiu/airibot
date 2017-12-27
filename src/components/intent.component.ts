@@ -19,6 +19,7 @@ export class AppIntent  implements OnInit{
   	ngOnInit() {
         this.intentService.list().subscribe(    
           suc => {
+            console.log('suc in list=');
             console.log(suc);
             this.intents = suc.intents;
             if(this.intents.length > 0) {
@@ -91,6 +92,7 @@ export class AppIntent  implements OnInit{
   deleteIntentMessage(id:number,intent_id:number,type:number) {
     console.log('id in begin=' + id);
     console.log('type = ' + type);
+    console.log('intent_id =' + intent_id);
         this.intentMessageService.delete(id,intent_id,type).subscribe(    
           suc => {
             console.log('id=' + id);

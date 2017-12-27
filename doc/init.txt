@@ -1,6 +1,8 @@
 https://coursetro.com/posts/code/84/Setting-up-an-Angular-4-MEAN-Stack-(Tutorial)
 ng build --watch && PORT=3014 node server.js
 
+cd /Library/WebServer/Documents/airibot
+
 ng build --watch
 
 export GOOGLE_APPLICATION_CREDENTIALS=/Library/WebServer/Documents/airibot/key/Airi-fcc67c4f4a44.json && PORT=4209 nodemon ./server.js

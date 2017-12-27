@@ -11,7 +11,7 @@ module.exports = {
       for (i = 0; i < results.length; i++) { 
         item = results[i];
         existedInArray = false;
-        for (j = 0; j < intents.length; j++) {
+        for (j = 0; j < intents.length; j++) { 
           intent = intents[j];
           if(intent.ID == item.ID) {
             existedInArray = true;
@@ -53,6 +53,7 @@ module.exports = {
         var NameInDialogFlow = intent.name;
         console.log(NameInDialogFlow);
         console.log('end');
+        name = name.replace('\'', '\\\'');
         connection.query("insert into Intent(Name,NameInDialogFlow) values('" + name + "','" + NameInDialogFlow + "')", function (error, results, fields) {
           if (error)  {
               var resJson = {

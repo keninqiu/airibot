@@ -44,12 +44,7 @@ bot.on('message', function(userId, message){
             "payload": "thumbs_down"
         }
     ];
-    bot.sendQuickReplies(userId, messageText, replies);
-
-    //sleep.sleep(5);
-    bot.sendQuickReplies(userId, messageText + ",repeat 1", replies);
-    //sleep.sleep(5);
-    bot.sendQuickReplies(userId, messageText + ",repeat 2", replies);    
+    bot.sendQuickReplies(userId, messageText, replies);   
 });
  
 // Setup listener for quick reply messages 
