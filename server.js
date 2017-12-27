@@ -6,11 +6,6 @@ const app = express();
 var FBBotFramework = require('fb-bot-framework');
 var responseCtrl = require('./server/controllers/responseCtrl.js');
 
-const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
-const sessionId = 'quickstart-session-id';
-const query = 'hello';
-const languageCode = 'en-US';
-
 app.use(express.static(path.join(__dirname, 'dist')));
 
 const api = require('./server/routes/api');
@@ -26,10 +21,6 @@ app.use('/webhooks/facebook', bot.middleware());
 
 // Setup listener for incoming messages 
 bot.on('message', function(userId, message){
-    //bot.sendTextMessage(userId, "Echo Message:" + message); 
-    //var queries = [message];
-    //detect.detectTextIntent(projectId,sessionId,queries, languageCode);
-    // Send quick replies 
     var reply = responseCtrl.reply(userId, message);
     bot.sendQuickReplies(userId, reply.messageText, reply.quickReplies);   
 });
@@ -46,9 +37,6 @@ bot.on('postback', function(userId, payload){
     if (payload == "GET_STARTED") {
         getStarted(userId);
     }
-    
-    // Other postback callbacks here 
-    // ... 
     
 });
  

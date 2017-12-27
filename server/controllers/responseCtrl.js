@@ -19,7 +19,7 @@ module.exports = {
         },
         {
             "content_type": "text",
-            "title": "Bad",
+            "title": "Badd",
             "payload": "thumbs_down"
         }
     ];
