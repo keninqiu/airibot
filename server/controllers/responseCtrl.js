@@ -18,7 +18,19 @@ module.exports = {
 	      if(length > 0) {
 	      	var randomIndex = Math.floor((Math.random() * length));
 	      	var text = results[randomIndex].Text;
-	      	return {messageText:text,quickReplies:[]};  
+		    var quickReplies = [
+		        {
+		            "content_type": "text",
+		            "title": "Good",
+		            "payload": "thumbs_up"
+		        },
+		        {
+		            "content_type": "text",
+		            "title": "Bad",
+		            "payload": "thumbs_down"
+		        }
+		    ];	      	
+	      	return {messageText:text,quickReplies:quickReplies};  
 	      }
 
 	    });
