@@ -5,7 +5,7 @@ const http = require('http');
 const app = express();
 var FBBotFramework = require('fb-bot-framework');
 var detect = require('./server/dialogflow/detect');
-var sleep = require('sleep');
+var responseCtrl = require('../controllers/responseCtrl.js');
 
 const projectId = 'airi-b9eae'; //https://dialogflow.com/docs/agents#settings
 const sessionId = 'quickstart-session-id';
@@ -28,23 +28,11 @@ app.use('/webhooks/facebook', bot.middleware());
 // Setup listener for incoming messages 
 bot.on('message', function(userId, message){
     //bot.sendTextMessage(userId, "Echo Message:" + message); 
-    var queries = [message];
+    //var queries = [message];
     //detect.detectTextIntent(projectId,sessionId,queries, languageCode);
     // Send quick replies 
-    var messageText = 'Your userId is ' + userId + ',You say:' + message ;
-    var replies = [
-        {
-            "content_type": "text",
-            "title": "Good to go",
-            "payload": "thumbs_up"
-        },
-        {
-            "content_type": "text",
-            "title": "Bad to delete",
-            "payload": "thumbs_down"
-        }
-    ];
-    bot.sendQuickReplies(userId, messageText, replies);   
+    var reply = responseCtrl.reply;
+    bot.sendQuickReplies(userId, reply.messageText, reply.quickReplies);   
 });
  
 // Setup listener for quick reply messages 
