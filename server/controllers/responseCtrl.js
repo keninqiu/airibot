@@ -16,7 +16,7 @@ module.exports = {
 	      if (error) throw error;
 	      var length = results.length;
 	      if(length > 0) {
-	      	var randomIndex = Math.floor((Math.random() * 10));
+	      	var randomIndex = Math.floor((Math.random() * length));
 	      	var text = results[randomIndex].Text;
 	      	return {messageText:text,quickReplies:[]};  
 	      }
