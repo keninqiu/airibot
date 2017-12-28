@@ -22,7 +22,6 @@ module.exports = {
 		text = result[0].Text;
 	}
 
-	/*
 	var quickReplies = [
 	{
 		            "content_type": "text",
@@ -35,9 +34,9 @@ module.exports = {
 		            "payload": "thumbs_down"
 		        }
 	];	
-	*/
-	var quickReplies = [];
-	var ret =  {messageText:text,quickReplies:quickReplies};	
+	var ret =  {messageText:text,quickReplies:quickReplies};
+	console.log('ret3=');
+	console.log(ret);    	
 	return ret;
   	/*
   await	detect.detectTextIntent(message).then(responses => {   
