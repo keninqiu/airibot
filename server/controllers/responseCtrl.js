@@ -37,9 +37,7 @@ module.exports = {
 	];	
 	*/
 	var quickReplies = [];
-	var ret =  {messageText:text,quickReplies:quickReplies};
-	console.log('ret3=');
-	console.log(ret);    	
+	var ret =  {messageText:text,quickReplies:quickReplies};	
 	return ret;
   	/*
   await	detect.detectTextIntent(message).then(responses => {   

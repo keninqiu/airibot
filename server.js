@@ -22,7 +22,8 @@ app.use('/webhooks/facebook', bot.middleware());
 // Setup listener for incoming messages 
 bot.on('message', async function(userId, message){
     var reply = await responseCtrl.reply(userId, message);
-    bot.sendQuickReplies(userId, reply.messageText, reply.quickReplies);   
+    //bot.sendQuickReplies(userId, reply.messageText, reply.quickReplies);   
+    bot.sendTextMessage(userId, reply.messageText);
 });
  
 // Setup listener for quick reply messages 
