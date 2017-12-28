@@ -23,9 +23,9 @@ module.exports = {
 		IntentID = result[0].IntentID;
 		sql = "insert into UserDialog(SocialID,SocialUserID,message,IntentID) values(1,'" + userId + "','" + message + "'," + IntentID + ")";
 		var client = databaseClient.getClient();
-		await client.startTransaction();
-		var result = await client.executeTransaction(sql, []);
-		await client.stopTransaction();		
+		client.startTransaction();
+		client.executeTransaction(sql, []);
+		client.stopTransaction();		
 	}
 
 	var quickReplies = [
