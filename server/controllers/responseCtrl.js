@@ -1,6 +1,6 @@
 var detect = require('../dialogflow/detect');
-//var database = require('../common/database.js');
-var Client = require("mysql-pro");
+var databaseClient = require('../common/databaseClient.js');
+
 
 module.exports = {
   reply : async function(userId, message) {
@@ -10,16 +10,7 @@ module.exports = {
   	console.log(intentName);
 
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
-	var client = new Client({
-	    mysql: {
-	        host: "127.0.0.1",
-	        port: 3306,
-	        database: "airi_dev",
-	        user: "root",
-	        password: "mysql"
-	    }
-	});
-
+	var client = databaseClient.getClient();
 	await client.startTransaction();
 	var result = await client.executeTransaction(sql, []);
 	await client.stopTransaction();

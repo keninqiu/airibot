@@ -1,11 +1,12 @@
+var config = require('./config.json');
 module.exports = {
   getConn : function() {
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'mysql',
-      database : 'airi_dev'
+      host     : config.DB_HOST,
+      user     : config.DB_USER,
+      password : config.DB_PASS,
+      database : config.DB_NAME
     });
      
     connection.connect();  
