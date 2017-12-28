@@ -20,6 +20,12 @@ module.exports = {
 	var text = 'unknown';
 	if (result.length > 0) {
 		text = result[0].Text;
+		IntentID = result[0].IntentID;
+		sql = "insert into UserDialog(SocialID,SocialUserID,message,IntentID) values(1,'" + userId + "','" + message + "'," + IntentID + ")";
+		var client = databaseClient.getClient();
+		await client.startTransaction();
+		var result = await client.executeTransaction(sql, []);
+		await client.stopTransaction();		
 	}
 
 	var quickReplies = [
