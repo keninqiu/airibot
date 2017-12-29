@@ -13,7 +13,7 @@ module.exports = {
   	console.log('parameters=');
   	console.log(response.queryResult.parameters);
 
-  	var parameters = JSON.stringify(response.queryResult.parameters);
+  	var parameters = JSON.stringify(response);
   	console.log('parameters1=' + parameters);
   	parameters = parameters.replace('\'', '\\\'');
   	console.log('parameters2=' + parameters);
