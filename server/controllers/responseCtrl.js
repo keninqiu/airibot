@@ -4,9 +4,11 @@ var databaseClient = require('../common/databaseClient.js');
 
 module.exports = {
   reply : async function(userId, message) {
-  	responses = await	detect.detectTextIntent(message);
+  	responses = await detect.detectTextIntent(message);
     const response = responses[0];
     var intentName = response.queryResult.intent.displayName;
+    console.log('response from detectTextIntent=');
+    console.log(response);
   	console.log(intentName);
 
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";

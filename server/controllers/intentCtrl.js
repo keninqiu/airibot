@@ -5,8 +5,9 @@ module.exports = {
   listEntities: function(req, res) {
     var intent_id = req.body.intent_id;
     var connection = database.getConn();
-     
-    connection.query('SELECT * from IntentEntity where IntentID=' + intent_id, function (error, results, fields) {
+    var sql = 'SELECT * from IntentEntity where IntentID=' + intent_id;
+    console.log('sql in listEntities='+sql); 
+    connection.query(sql, function (error, results, fields) {
       if (error) throw error;
       var resJson = {code:200,intentEntities:results};
       res.json(resJson);

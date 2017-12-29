@@ -84,6 +84,16 @@ export class AppIntent  implements OnInit{
 	intentClick(event, newValue) {
 	    console.log(newValue);
 	    this.selectedIntent = newValue;  
+              this.intentService.listEntities(this.selectedIntent.ID).subscribe(    
+                suc => {
+                  console.log('suc in listEntities=');
+                  console.log(suc);
+                  this.selectedIntent.intentEntities = suc.intentEntities;
+                },
+                err => {
+                   console.log(err);
+                }
+              );      
 	}
 
   	closeModal(): void {
