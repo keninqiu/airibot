@@ -9,7 +9,8 @@ module.exports = {
     var intentName = response.queryResult.intent.displayName;
     console.log('response from detectTextIntent=');
     console.log(response);
-  	console.log(intentName);
+  	console.log('parameters=');
+  	console.log(response.queryResult.parameters);
 
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
 	var client = databaseClient.getClient();
