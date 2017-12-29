@@ -13,8 +13,11 @@ module.exports = {
   	console.log('parameters=');
   	console.log(response.queryResult.parameters);
 
-  	console.log('fields=');
-  	console.log(response.queryResult.parameters.fields);
+  	var parameters = JSON.stringify(response.queryResult.parameters);
+  	console.log('parameters1=' + parameters);
+  	parameters = parameters.replace('\'', '\\\'');
+  	console.log('parameters2=' + parameters);
+
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
 	var client = databaseClient.getClient();
 	await client.startTransaction();
@@ -27,7 +30,8 @@ module.exports = {
 	if (result.length > 0) {
 		text = result[0].Text;
 		IntentID = result[0].IntentID;
-		sql = "insert into UserDialog(SocialID,SocialUserID,message,IntentID) values(1,'" + userId + "','" + message + "'," + IntentID + ")";
+		sql = "insert into UserDialog(SocialID,SocialUserID,message,IntentID,Entities) values(1,'" + userId + "','" + message + "'," + IntentID + ",'" + parameters + "')";
+		console.log('sql='+sql);
 		var client = databaseClient.getClient();
 		client.startTransaction();
 		client.executeTransaction(sql, []);
