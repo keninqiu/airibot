@@ -12,6 +12,8 @@ module.exports = {
   	console.log('parameters=');
   	console.log(response.queryResult.parameters);
 
+  	console.log('fields=');
+  	console.log(response.queryResult.parameters.fields);
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
 	var client = databaseClient.getClient();
 	await client.startTransaction();
