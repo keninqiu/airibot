@@ -7,10 +7,11 @@ module.exports = {
   	responses = await detect.detectTextIntent(message);
     const response = responses[0];
     var intentName = response.queryResult.intent.displayName;
-    console.log('response from detectTextIntent=');
-    console.log(response);
+    console.log('responses=');
+    console.log(responses);
+
   	console.log('parameters=');
-  	console.log(response.queryResult.parameters);
+  	console.log(response.queryResult.intent.parameters);
 
   	console.log('fields=');
   	console.log(response.queryResult.parameters.fields);
