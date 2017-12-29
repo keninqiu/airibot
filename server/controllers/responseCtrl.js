@@ -7,16 +7,9 @@ module.exports = {
   	responses = await detect.detectTextIntent(message);
     const response = responses[0];
     var intentName = response.queryResult.intent.displayName;
-    console.log('responses=');
-    console.log(responses);
 
-  	console.log('parameters=');
-  	console.log(response.queryResult.parameters);
-
-  	var parameters = JSON.stringify(response);
-  	console.log('parameters1=' + parameters);
+  	var parameters = JSON.stringify(response.queryResult.parameters);
   	parameters = parameters.replace('\'', '\\\'');
-  	console.log('parameters2=' + parameters);
 
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
 	var client = databaseClient.getClient();
