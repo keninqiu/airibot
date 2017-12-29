@@ -11,7 +11,7 @@ module.exports = {
     console.log(responses);
 
   	console.log('parameters=');
-  	console.log(response.queryResult.intent.parameters);
+  	console.log(response.queryResult.parameters);
 
   	console.log('fields=');
   	console.log(response.queryResult.parameters.fields);
