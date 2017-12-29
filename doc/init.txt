@@ -5,4 +5,5 @@ cd /Library/WebServer/Documents/airibot
 
 ng build --watch
 
+npm run-script build
 export GOOGLE_APPLICATION_CREDENTIALS=/Library/WebServer/Documents/airibot/key/Airi-fcc67c4f4a44.json && PORT=4210 nodemon ./server.js
