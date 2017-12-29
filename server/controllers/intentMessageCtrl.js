@@ -43,27 +43,73 @@ module.exports = {
 	      }     
 
         if(type == 1) {
-          var intentName = '';
-          var textArray = [];
-          for(var i=0;i<results.length;i++) {
-            var item = results[i];
-            intentName = item.NameInDialogFlow;
-            textArray.push(item.Text);
-          }
-          console.log('before update Intent');
-          console.log('intentName='+intentName);
-          console.log(textArray);
-          dialogflowManager.updateIntent(intentName,textArray);  
+
+          connection.query("SELECT * from IntentEntity where IntentID=" + intent_id, function (error, intentEntities, fields) {
+            var intentName = '';
+            var textArray = [];
+            for(var i=0;i<results.length;i++) {
+              console.log('i='+i);
+              var item = results[i];
+              intentName = item.NameInDialogFlow;
+              var text = item.Text;
+              var textParts = [{text:text}];
+
+              for(var k=0;k<textParts.length;k++) {
+                console.log('k='+k);
+                for(var j=0;j<intentEntities.length;j++) {
+                  console.log('j='+j);
+                  var entityName = intentEntities[j].Name;
+                  var entityValue = intentEntities[j].Value;  
+                  var thePartText = textParts[k].text;
+                  var index = thePartText.indexOf(entityValue);
+                  if(index > -1) {
+                    //
+                    textParts.splice(k,1);
+                    //var newParts = [];
+                    var subString = thePartText.substring(0, index);
+                    if(subString != '') {
+                      newItem = {text:subString};
+                      //newParts.push(newItem);
+                      textParts.splice(k,0,newItem);
+                      k++;
+                    }
+                    newItem = {text:entityValue,entityType:'@'+entityName,alias:entityName};
+                    textParts.splice(k,0,newItem);
+                    k++;
+
+                    subString = thePartText.substring(index + entityValue.length);
+                    if(subString != '') {
+                      newItem = {text:subString};
+                      textParts.splice(k,0,newItem);
+                      k++;
+                    }
+                    
+                  }                                  
+                }
+              }
+              console.log('textParts=');
+              console.log(textParts);
+              textArray.push(textParts);
+            }
+            console.log('before update Intent');
+            console.log('intentName='+intentName);
+            console.log(textArray);
+            dialogflowManager.updateIntent(intentName,textArray); 
+          });
+          connection.end();
         }
 
-      	  var resJson = {
-      	  	code:200,
-      	  	intentMessages:results
-      	  };
-          res.json(resJson);
-          return;
+      	var resJson = {
+      	  code:200,
+      	  intentMessages:results
+      	};
+        res.json(resJson);
+        return;
       });
-      connection.end();
+      if(type != 1) {
+        connection.end();
+      }
+      
     });
         	
   },
@@ -95,7 +141,6 @@ module.exports = {
                 textArray.push(item.Text);
               }
               if(intentName != '') {
-                console.log('updating me');
                 dialogflowManager.updateIntent(intentName,textArray);                  
               }
 

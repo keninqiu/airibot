@@ -2,6 +2,18 @@ var database = require('../common/database.js');
 var dialogflowManager = require('../common/dialogflowManager.js');
 
 module.exports = {
+  listEntities: function(req, res) {
+    var intent_id = req.body.intent_id;
+    var connection = database.getConn();
+     
+    connection.query('SELECT * from IntentEntity where IntentID=' + intent_id, function (error, results, fields) {
+      if (error) throw error;
+      var resJson = {code:200,intentEntities:results};
+      res.json(resJson);
+    });
+     
+    connection.end();       
+  },
   lists : function(req, res) {
     var connection = database.getConn(); 
     var sql = 'SELECT Intent.*,IntentMessage.ID as IntentMessageID,IntentMessage.Type,IntentMessage.Text from Intent left join IntentMessage on IntentMessage.IntentID=Intent.ID';
@@ -113,5 +125,55 @@ module.exports = {
     });
      
           
+  },
+
+  saveEntity: function(req, res) {
+    body = req.body;  
+    intent_id = body.intent_id;  
+    name = body.name;
+    value = body.value;
+    name = name.replace('\'', '\\\'');
+    value = value.replace('\'', '\\\'');
+    var connection = database.getConn(); 
+    var sql = "insert into IntentEntity(IntentID,Name,Value) values(" + intent_id + ",'" + name + "','" + value + "')";
+    connection.query(sql, function (error, results, fields) {
+          if (error)  {
+              var resJson = {
+                code:400,
+                sql:sql
+              };
+              res.json(resJson);
+              return;
+          }
+          sql = "SELECT * from IntentEntity where IntentID=" + intent_id + " and Name='" + name + "' and Value='" + value + "'";
+          connection.query(sql, function (error, results, fields) {
+            if (error)  {
+                var resJson = {
+                  code:401,
+                  sql:sql
+                };
+                res.json(resJson);
+                return;
+            }  
+
+              var resJson = {
+                code:200,
+                intentEntities:results
+              };
+              res.json(resJson);
+              return;
+          });
+          connection.end();
+        });          
+  },
+  deleteEntity:function(req, res) {
+    body = req.body;  
+    id = body.id; 
+    var connection = database.getConn(); 
+    connection.query('DELETE from IntentEntity where ID=' + id, function (error, results, fields) {
+        var resJson = {code:200,intentEntities:results};
+        res.json(resJson);
+      });
+      connection.end();      
   }
 }

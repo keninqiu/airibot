@@ -17,8 +17,23 @@ export class IntentService {
     {id:id})
       .map(res => res.json());
   }
+  deleteIntentEntity(id: number) {
+    return this.http.post ('/api/intent/deleteEntity',
+    {id:id})
+      .map(res => res.json());
+  }
   list() {
     return this.http.get ('/api/intents')
       .map(res => res.json());    
+  }
+  listEntities(intent_id:number) {
+    return this.http.post ('/api/intent/listEntities',
+    {intent_id:intent_id})
+      .map(res => res.json());    
+  }  
+  saveEntity(intent_id:number,name:string,value:string) {
+    return this.http.post ('/api/intent/saveEntity',
+    {intent_id:intent_id,name:name,value:value})
+      .map(res => res.json());  
   }
 }

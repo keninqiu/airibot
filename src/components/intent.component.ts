@@ -11,8 +11,11 @@ export class AppIntent  implements OnInit{
 	name: string;
   user_says: string;
   response_message: string;
+  entityName: string;
+  entityValue: string;
+  entities: any;
+  intents: any;
 	selectedIntent: any;
-	intents: any;
 	hideAlert: boolean = true;
 	constructor(private intentService:IntentService,private intentMessageService:IntentMessageService) {
 	}
@@ -24,6 +27,18 @@ export class AppIntent  implements OnInit{
             this.intents = suc.intents;
             if(this.intents.length > 0) {
               this.selectedIntent = this.intents[0];
+
+              this.intentService.listEntities(this.selectedIntent.ID).subscribe(    
+                suc => {
+                  console.log('suc in listEntities=');
+                  console.log(suc);
+                  this.selectedIntent.intentEntities = suc.intentEntities;
+                },
+                err => {
+                   console.log(err);
+                }
+              );
+
             }
           },
           err => {
@@ -31,6 +46,40 @@ export class AppIntent  implements OnInit{
           }
         );
   	}
+
+  saveEntity() {
+        this.intentService.saveEntity(this.selectedIntent.ID,this.entityName,this.entityValue).subscribe(    
+          suc => {
+            console.log('suc in saveEntity=');
+            console.log(suc);
+            this.entityName = '';
+            this.entityValue = '';
+            this.selectedIntent.intentEntities = this.selectedIntent.intentEntities.concat(suc.intentEntities);
+          },
+          err => {
+             console.log(err);
+          }
+        );  
+  }  
+
+  deleteIntentEntity(id:number,intent_id:number) {
+        this.intentService.deleteIntentEntity(id).subscribe(    
+          suc => {
+            if(suc.code == 200) {   
+              for(var i = this.selectedIntent.intentEntities.length - 1; i >= 0; i--) {
+                if(this.selectedIntent.intentEntities[i].ID == id) {
+                   this.selectedIntent.intentEntities.splice(i, 1);
+                }
+              }                      
+            }
+            else {
+            }
+          },
+          err => {
+            console.log(err);
+          }
+        ); 
+  }
 
 	intentClick(event, newValue) {
 	    console.log(newValue);

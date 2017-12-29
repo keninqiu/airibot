@@ -47,12 +47,52 @@
 
 
         <div class="input-group">
-           <input type="text" class="form-control" [(ngModel)]="user_says" >    
+           <input type="text" class="form-control"  [(ngModel)]="user_says" >    
            <span class="input-group-btn">
                 <button class="btn btn-primary" type="button" (click)="saveUserSays()">Save</button>
            </span>
         </div>
       </div>
+
+
+      <div>Entities
+
+<div class="container" *ngIf="selectedIntent">
+  <div class="panel panel-default">
+    <table class="table table-hover">
+      <tbody>
+        <tr *ngFor="let entity of selectedIntent.intentEntities">
+          <td>
+            <span class="glyphicon glyphicon-file"></span>
+            {{entity.Name}}
+          </td>
+          <td>
+            <span class="glyphicon glyphicon-file"></span>
+            {{entity.Value}}
+          </td>          
+          <td class="text-right text-nowrap">
+            <button class="btn btn-xs btn-warning" (click)="deleteIntentEntity(entity.ID,entity.IntentID)">
+              <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+        <div class="input-group">
+           Name:<input type="text" class="form-control"  [(ngModel)]="entityName" >    
+           Value:<input type="text" class="form-control"  [(ngModel)]="entityValue" >   
+           <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" (click)="saveEntity()">Save</button>
+           </span>
+        </div>
+      </div>
+
       <div>Response Message
 <div class="container" *ngIf="selectedIntent">
   <div class="panel panel-default">

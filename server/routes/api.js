@@ -43,6 +43,9 @@ router.get('/users', async (req, res) => {
 router.get('/intents',jsonParser, intentCtrl.lists);  
 router.post('/intent/create',jsonParser, intentCtrl.create);  
 router.post('/intent/delete',jsonParser, intentCtrl.delete); 
+router.post('/intent/saveEntity',jsonParser, intentCtrl.saveEntity);
+router.post('/intent/deleteEntity',jsonParser, intentCtrl.deleteEntity);
+router.post('/intent/listEntities',jsonParser, intentCtrl.listEntities); 
 router.get('/intentMessages',urlEncodedParser, intentMessageCtrl.lists);  
 router.post('/intentMessage/create',jsonParser, intentMessageCtrl.create);  
 router.post('/intentMessage/delete',jsonParser, intentMessageCtrl.delete); 

@@ -46,7 +46,7 @@ module.exports = {
         for(var i=0; i < UserSaysArray.length; i++) {
           var phrase = {
             type: 'TYPE_EXAMPLE',
-            parts: [{text: UserSaysArray[i]}]   
+            parts: UserSaysArray[i]
           };
           intent.trainingPhrases.push(phrase);
         }

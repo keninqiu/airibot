@@ -4,3 +4,6 @@ create table IntentMessage(ID int NOT NULL AUTO_INCREMENT,IntentID int NOT NULL,
 
 create table UserDialog(ID int NOT NULL AUTO_INCREMENT,SocialID int NOT NULL, SocialUserID varchar(50), message varchar(500),IntentID int, PRIMARY KEY (ID));
 alter table UserDialog add CreatedAt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+
+create table IntentEntity(ID int NOT NULL AUTO_INCREMENT,Name varchar(100),Value varchar(100),PRIMARY KEY (ID));
+alter table IntentEntity add IntentID int NOT NULL ;	
