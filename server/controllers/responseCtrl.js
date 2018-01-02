@@ -17,9 +17,7 @@ module.exports = {
 	var result = await client.executeTransaction(sql, []);
 	await client.stopTransaction();
 
-	//console.log('result=');
-	//console.log(result);
-	var text = 'unknown';
+	var text = 'Unknown Intent';
 	if (result.length > 0) {
 		text = result[0].Text;
 		IntentID = result[0].IntentID;
@@ -32,20 +30,18 @@ module.exports = {
 	}
 
 	var quickReplies = [
-	{
-		            "content_type": "text",
-		            "title": "Good",
-		            "payload": "thumbs_up"
-		        },
-		        {
-		            "content_type": "text",
-		            "title": "Bad",
-		            "payload": "thumbs_down"
-		        }
+		{
+			"content_type": "text",
+			"title": "Good",
+			"payload": "thumbs_up"
+		},
+		{
+			"content_type": "text",
+			"title": "Bad",
+			"payload": "thumbs_down"
+		}
 	];	
-	var ret =  {messageText:text,quickReplies:quickReplies};
-	console.log('ret3=');
-	console.log(ret);    	
+	var ret =  {messageText:text,quickReplies:quickReplies};  	
 	return ret;
   	/*
   await	detect.detectTextIntent(message).then(responses => {   
