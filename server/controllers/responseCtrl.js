@@ -12,10 +12,8 @@ module.exports = {
   	parameters = parameters.replace('\'', '\\\'');
 
   	var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
-	var client = databaseClient.getClient();
-	await client.startTransaction();
-	var result = await client.executeTransaction(sql, []);
-	await client.stopTransaction();
+
+	var result = await databaseClient.execSql(sql);
 
 	var text = 'Unknown Intent';
 	if (result.length > 0) {
@@ -23,12 +21,11 @@ module.exports = {
 		IntentID = result[0].IntentID;
 		sql = "insert into UserDialog(SocialID,SocialUserID,message,IntentID,Entities) values(1,'" + userId + "','" + message + "'," + IntentID + ",'" + parameters + "')";
 		console.log('sql='+sql);
-		var client = databaseClient.getClient();
-		client.startTransaction();
-		client.executeTransaction(sql, []);
-		client.stopTransaction();		
+		await databaseClient.execSql(sql);		
 	}
+	else {
 
+	}
 	var quickReplies = [
 		{
 			"content_type": "text",
