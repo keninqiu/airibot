@@ -29,7 +29,7 @@ module.exports = {
     */
     const  mysql = require('mysql2/promise');
   // create the connection
-    var connection = mysql.createConnection({
+    var connection = await mysql.createConnection({
       host     : config.DB_HOST,
       user     : config.DB_USER,
       password : config.DB_PASS,
