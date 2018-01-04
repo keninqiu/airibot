@@ -13,19 +13,16 @@ module.exports = {
   	//var sql = "SELECT distinct IntentMessage.* from Intent,IntentMessage where IntentMessage.Type = 2 and IntentMessage.IntentID=Intent.ID and Intent.Name='" + intentName + "'";
 
   	var sql = "call IntentProcess(1,'" + userId + "','" + message + "','" + intentName + "','" + parameters + "')";
-	console.log('sql='+sql);
+	//console.log('sql='+sql);
 	var result = await database.execSql(sql);
 
-	console.log(result);
+	//console.log(result);
 	var text = 'Unknown Intent 0';
-	console.log('length=' + result.length);
+	//console.log('length=' + result.length);
 	if (result.length > 0) {
 		result = result[0];
 		if (result.length > 0) {
-			console.log('result0=');
-			console.log(result[0]);
 			text = result[0].Text;
-			console.log('text='+text);	
 		}
 	}
 
