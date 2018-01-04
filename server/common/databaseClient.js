@@ -23,7 +23,7 @@ module.exports = {
             password: config.DB_PASS
         }
     });
-    var result = await client.query(sql, []);
+    var result = await client.query(sql,true, []);
     return result;        
   }
 }
