@@ -18,7 +18,8 @@ module.exports = {
 	var result = await database.execSql(sql);
 
 	console.log(result);
-	var text = 'Unknown Intent';
+	var text = 'Unknown Intent 0';
+	console.log('length=' + result.length);
 	if (result.length > 0) {
 		console.log('result0=');
 		console.log(result[0]);
