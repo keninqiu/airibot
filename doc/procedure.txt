@@ -1,0 +1,40 @@
+DELIMITER //
+drop procedure if exists intentProcess // 
+CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Message varchar(500),IN IntentName varchar(100),IN Entities varchar(500))  
+	BEGIN 
+		INSERT INTO `UserDialog`(`SocialID`,`SocialUserID`,`Message`,`IntentName`,`Entities`) values(SocialID,SocialUserID,Message,IntentName,Entities);  
+
+		SELECT distinct `IntentMessage`.`Text` from `Intent`,`IntentMessage` where `IntentMessage`.`Type` = 2 and `IntentMessage`.`IntentID`=`Intent`.`ID` and `Intent`.`Name`=IntentName;
+	END 
+//
+DELIMITER ; 
+
+call IntentProcess(1,'22344','hi','Welcome','3456');
+
+
+
+
+
+
+
+
+
+
+
+
+DELIMITER //
+drop procedure if exists intentProcess // 
+CREATE PROCEDURE intentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Message varchar(500),IN IntentName varchar(100),IN Entities varchar(500), OUT Response varchar(500))  
+	BEGIN 
+		INSERT INTO `UserDialog`(`SocialID`,`SocialUserID`,`Message`,`IntentName`,`Entities`) values(SocialID,SocialUserID,Message,IntentName,Entities);  
+
+		SELECT distinct `IntentMessage`.`Text` into Response from `Intent`,`IntentMessage` where `IntentMessage`.`Type` = 2 and `IntentMessage`.`IntentID`=`Intent`.`ID` and `Intent`.`Name`=IntentName;
+	END 
+//
+DELIMITER ; 
+
+
+
+set @p_out='';
+call intentProcess(1,'22344','hi','Welcome','3456',@p_out);
+select @p_out;

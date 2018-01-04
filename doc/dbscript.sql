@@ -8,3 +8,5 @@ alter table UserDialog add Entities varchar(500) ;
 
 create table IntentEntity(ID int NOT NULL AUTO_INCREMENT,Name varchar(100),Value varchar(100),PRIMARY KEY (ID));
 alter table IntentEntity add IntentID int NOT NULL ;	
+
+create table UserContext(ID int NOT NULL AUTO_INCREMENT,SocialID int NOT NULL, SocialUserID varchar(50), CurrentIntentName varchar(100),Email varchar(255), Password varchar(255),BusinessName varchar(255),GivenName varchar(255),Website varchar(255), PRIMARY KEY (ID));
