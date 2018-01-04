@@ -1,6 +1,6 @@
 var detect = require('../dialogflow/detect');
 var databaseClient = require('../common/databaseClient.js');
-
+var database = require('../common/database.js');
 
 module.exports = {
   reply : async function(userId, message) {
@@ -15,7 +15,7 @@ module.exports = {
 
   	var sql = "call IntentProcess(1,'" + userId + "','" + message + "','" + intentName + "','" + parameters + "')";
 	console.log('sql='+sql);
-	var result = await databaseClient.execSql(sql);
+	var result = await database.execSql(sql);
 
 	var text = 'Unknown Intent';
 	if (result.length > 0) {
