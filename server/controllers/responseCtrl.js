@@ -20,10 +20,13 @@ module.exports = {
 	var text = 'Unknown Intent 0';
 	console.log('length=' + result.length);
 	if (result.length > 0) {
-		console.log('result0=');
-		console.log(result[0]);
-		text = result[0].Text;
-		console.log('text='+text);	
+		result = result[0];
+		if (result.length > 0) {
+			console.log('result0=');
+			console.log(result[0]);
+			text = result[0].Text;
+			console.log('text='+text);	
+		}
 	}
 
 	var quickReplies = [
