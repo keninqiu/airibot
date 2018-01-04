@@ -22,7 +22,7 @@ module.exports = {
     });
      
     connection.connect();  
-    var result = connection.query(sql, true);
+    var result = await connection.query(sql, true);
     connection.end();
     return result;        
   }  
