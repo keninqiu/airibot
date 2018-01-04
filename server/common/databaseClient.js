@@ -23,9 +23,7 @@ module.exports = {
             password: config.DB_PASS
         }
     });
-    await client.startTransaction();
-    var result = await client.executeTransaction(sql, []);
-    await client.stopTransaction();
+    var result = await client.query(sql, []);
     return result;        
   }
 }
