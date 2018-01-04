@@ -30,6 +30,7 @@
     "fb-bot-framework": "^0.3.0",
     "fb-messenger": "^1.2.0",
     "mysql-pro": "^1.0.1",
+    "mysql2": "^1.5.1",
     "pump": "^1.0.2",
     "rxjs": "^5.4.2",
     "through2": "^2.0.3",
