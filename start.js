@@ -21,7 +21,7 @@ app.use('/webhooks/facebook', bot.middleware());
 
 // Setup listener for incoming messages 
 bot.on('message', async function(userId, message){
-    console.log('something is coming in for userID:' + userID + ",message:" + message);
+    console.log('something is coming in for userID:' + userId + ",message:" + message);
     var reply = await responseCtrl.reply(userId, message);
      
     bot.sendTextMessage(userId, reply.messageText);
