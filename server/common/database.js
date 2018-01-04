@@ -36,6 +36,8 @@ module.exports = {
       database : config.DB_NAME
     });  // query database
     const [rows, fields] = await connection.execute(sql, []);
-    return rows;
+    if(rows.length > 0)
+      return rows[0];
+    return [];
   }  
 }
