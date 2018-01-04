@@ -20,7 +20,10 @@ module.exports = {
 	console.log(result);
 	var text = 'Unknown Intent';
 	if (result.length > 0) {
-		text = result[0].Text;	
+		console.log('result0=');
+		console.log(result[0]);
+		text = result[0].Text;
+		console.log('text='+text);	
 	}
 
 	var quickReplies = [
