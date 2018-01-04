@@ -1,5 +1,4 @@
 var detect = require('../dialogflow/detect');
-var databaseClient = require('../common/databaseClient.js');
 var database = require('../common/database.js');
 
 module.exports = {
