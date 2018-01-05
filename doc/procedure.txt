@@ -2,44 +2,77 @@ DELIMITER //
 drop procedure if exists intentProcess // 
 CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Message varchar(500),IN IntentName varchar(100),IN Entities varchar(500))  
 	BEGIN 
+		DECLARE done INT DEFAULT 0;
+		DECLARE current_intent_name varchar(100) DEFAULT "";
+		DECLARE cursor_name CURSOR FOR select CurrentIntentName from UserContext where `SocialID`=SocialID AND `SocialUserID`=SocialUserID order by ID desc limit 1 ;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+		OPEN cursor_name;
+			IF done = 0 THEN
+				FETCH cursor_name INTO current_intent_name;
+			END IF;
+		CLOSE cursor_name;
 
 		INSERT INTO `UserDialog`(`SocialID`,`SocialUserID`,`Message`,`IntentName`,`Entities`) VALUES(SocialID,SocialUserID,Message,IntentName,Entities);  
 
 		IF IntentName = "Default Fallback Intent" THEN 
-			set IntentName = "Password";
+			IF current_intent_name = "Email" THEN
+				set IntentName = "Password";
+			END IF;
+			IF current_intent_name = "Website" THEN
+				set IntentName = "BusinessName";
+			END IF;		
+			IF current_intent_name = "BusinessName" THEN
+				set IntentName = "GivenName";
+			END IF;		
+			IF current_intent_name = "GivenName" THEN
+				set IntentName = "Email";
+			END IF;								
 		END IF;
 		IF IntentName = "Welcome" THEN
 			INSERT INTO `UserContext`(`SocialID`,`SocialUserID`,`CurrentIntentName`) VALUES(SocialID,SocialUserID,IntentName);
+		ELSEIF IntentName = "Right" THEN
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Action`="Login" WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Welcome" order by ID desc limit 1;
+		ELSEIF IntentName = "Wrong" THEN
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Action`="Register" WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Welcome" order by ID desc limit 1;			
 		ELSEIF IntentName = "Website" THEN
 			set @website = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.url.stringValue'));
 			if(@website is null) then
 				set @website = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Website`=@website WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Welcome";
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Website`=@website WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Wrong" order by ID desc limit 1;
 		ELSEIF IntentName = "BusinessName" THEN
 			set @business_name = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.business_name.stringValue'));
 			if(@business_name is null) then
 				set @business_name = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`BusinessName`=@business_name WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Website";	
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`BusinessName`=@business_name WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Website" order by ID desc limit 1;	
 		ELSEIF IntentName = "GivenName" THEN
 			set Entities = replace(Entities, '-', ''); 
 			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.givenname.stringValue'));
 			if(@parameter is null) then
 				set @parameter = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`GivenName`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="BusinessName";	
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`GivenName`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="BusinessName" order by ID desc limit 1;	
 		ELSEIF IntentName = "Email" THEN
 			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.email.stringValue'));
 			if(@parameter is null) then
 				set @parameter = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Email`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="GivenName";	
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Email`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName` in ("GivenName","Right") order by ID desc limit 1;	
+		ELSEIF IntentName = "Password" THEN
+			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.password.stringValue'));
+			if(@parameter is null) then
+				set @parameter = Message;
+			end if;
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Password`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Email" order by ID desc limit 1;				
 		END IF;
 		SELECT distinct `IntentMessage`.`Text` from `Intent`,`IntentMessage` where `IntentMessage`.`Type` = 2 and `IntentMessage`.`IntentID`=`Intent`.`ID` and `Intent`.`Name`=IntentName;
 	END 
 //
 DELIMITER ; 
+
+
+
 
 call IntentProcess(1,'22344','hi','Welcome','');
 call IntentProcess(1,'22344','www.surrounded.ca','Website','{"fields":{"url":{"stringValue":"www.surrounded.ca","kind":"stringValue"}}}');
