@@ -2,6 +2,7 @@ DELIMITER //
 drop procedure if exists intentProcess // 
 CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Message varchar(500),IN IntentName varchar(100),IN Entities varchar(500))  
 	BEGIN 
+		DECLARE user_id INT DEFAULT 0;
 		DECLARE done INT DEFAULT 0;
 		DECLARE current_intent_name varchar(100) DEFAULT "";
 		DECLARE cursor_name CURSOR FOR select CurrentIntentName from UserContext where `SocialID`=SocialID AND `SocialUserID`=SocialUserID order by ID desc limit 1 ;
@@ -40,6 +41,15 @@ CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Me
 				set @website = Message;
 			end if;
 			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Website`=@website WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Wrong" order by ID desc limit 1;
+
+			insert into `wa_users` set `email`=CURRENT_TIMESTAMP(), `password`="123456", `last_ip`="127.0.0.1", `last_user_agent`="facebook messenger", `referralCode`="airidev!@#", `last_login`=NOW(), `created_at`=NOW(), `updated_at`=NOW(), `admin`=0, `active`=0, `type`=0, `social`=0;
+
+			SET user_id = LAST_INSERT_ID();
+
+			INSERT into `wa_clients` (`user_id`,`website`) values(user_id,@website);
+
+			insert into `usr_scan_for_updates`(`user_id`,`category`,`date`,`priority`) values (user_id,"site",now(),1);
+
 		ELSEIF IntentName = "BusinessName" THEN
 			set @business_name = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.business_name.stringValue'));
 			if(@business_name is null) then
