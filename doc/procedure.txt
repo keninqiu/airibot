@@ -5,11 +5,12 @@ CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Me
 		DECLARE user_id INT DEFAULT 0;
 		DECLARE done INT DEFAULT 0;
 		DECLARE current_intent_name varchar(100) DEFAULT "";
-		DECLARE cursor_name CURSOR FOR select CurrentIntentName from UserContext where `SocialID`=SocialID AND `SocialUserID`=SocialUserID order by ID desc limit 1 ;
+		DECLARE airi_user_id INT DEFAULT 0;
+		DECLARE cursor_name CURSOR FOR select CurrentIntentName,AiriUserID from UserContext where `SocialID`=SocialID AND `SocialUserID`=SocialUserID order by ID desc limit 1 ;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 		OPEN cursor_name;
 			IF done = 0 THEN
-				FETCH cursor_name INTO current_intent_name;
+				FETCH cursor_name INTO current_intent_name,airi_user_id;
 			END IF;
 		CLOSE cursor_name;
 
@@ -40,8 +41,7 @@ CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Me
 			if(@website is null) then
 				set @website = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Website`=@website WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Wrong" order by ID desc limit 1;
-
+			
 			insert into `wa_users` set `email`=CURRENT_TIMESTAMP(), `password`="123456", `last_ip`="127.0.0.1", `last_user_agent`="facebook messenger", `referralCode`="airidev!@#", `last_login`=NOW(), `created_at`=NOW(), `updated_at`=NOW(), `admin`=0, `active`=0, `type`=0, `social`=0;
 
 			SET user_id = LAST_INSERT_ID();
@@ -50,12 +50,16 @@ CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Me
 
 			insert into `usr_scan_for_updates`(`user_id`,`category`,`date`,`priority`) values (user_id,"site",now(),1);
 
+			UPDATE `UserContext` SET `AiriUserID`=user_id,`CurrentIntentName`=IntentName,`Website`=@website WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Wrong" order by ID desc limit 1;
+
 		ELSEIF IntentName = "BusinessName" THEN
 			set @business_name = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.business_name.stringValue'));
 			if(@business_name is null) then
 				set @business_name = Message;
 			end if;
 			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`BusinessName`=@business_name WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Website" order by ID desc limit 1;	
+			UPDATE `wa_clients` set company_name=@business_name where `user_id`= airi_user_id;
+
 		ELSEIF IntentName = "GivenName" THEN
 			set Entities = replace(Entities, '-', ''); 
 			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.givenname.stringValue'));
@@ -63,18 +67,24 @@ CREATE PROCEDURE IntentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Me
 				set @parameter = Message;
 			end if;
 			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`GivenName`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="BusinessName" order by ID desc limit 1;	
+			UPDATE `wa_users` set `name`=@parameter where `id`= airi_user_id;
+
 		ELSEIF IntentName = "Email" THEN
 			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.email.stringValue'));
 			if(@parameter is null) then
 				set @parameter = Message;
 			end if;
 			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Email`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName` in ("GivenName","Right") order by ID desc limit 1;	
+			UPDATE `wa_users` set `email`=@parameter where `id`= airi_user_id;
+
 		ELSEIF IntentName = "Password" THEN
 			set @parameter = trim(both '"' from JSON_EXTRACT(Entities,'$.fields.password.stringValue'));
 			if(@parameter is null) then
 				set @parameter = Message;
 			end if;
-			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Password`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Email" order by ID desc limit 1;				
+			UPDATE `UserContext` SET `CurrentIntentName`=IntentName,`Password`=@parameter WHERE `SocialID`=SocialID AND `SocialUserID`=SocialUserID and `CurrentIntentName`="Email" order by ID desc limit 1;	
+			UPDATE `wa_users` set `password`=@parameter where `id`= airi_user_id;
+
 		END IF;
 		SELECT distinct `IntentMessage`.`Text` from `Intent`,`IntentMessage` where `IntentMessage`.`Type` = 2 and `IntentMessage`.`IntentID`=`Intent`.`ID` and `Intent`.`Name`=IntentName;
 	END 
@@ -94,26 +104,3 @@ call IntentProcess(1,'22344','ken','GivenName','{"fields":{"given-name":{"string
 
 call IntentProcess(1,'1103988123037720','98523020','Default Fallback Intent','{"fields":{}}');
 
-
-
-
-
-
-
-
-DELIMITER //
-drop procedure if exists intentProcess // 
-CREATE PROCEDURE intentProcess(IN SocialID int,IN SocialUserID varchar(50),IN Message varchar(500),IN IntentName varchar(100),IN Entities varchar(500), OUT Response varchar(500))  
-	BEGIN 
-		INSERT INTO `UserDialog`(`SocialID`,`SocialUserID`,`Message`,`IntentName`,`Entities`) values(SocialID,SocialUserID,Message,IntentName,Entities);  
-
-		SELECT distinct `IntentMessage`.`Text` into Response from `Intent`,`IntentMessage` where `IntentMessage`.`Type` = 2 and `IntentMessage`.`IntentID`=`Intent`.`ID` and `Intent`.`Name`=IntentName;
-	END 
-//
-DELIMITER ; 
-
-
-
-set @p_out='';
-call intentProcess(1,'22344','hi','Welcome','3456',@p_out);
-select @p_out;
